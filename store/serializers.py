@@ -20,3 +20,20 @@ class ProductSerializer(serializers.ModelSerializer):
             'history_price_dates_3years': {'required': False, 'allow_null':True},
             'prediction_price_date': {'required': False, 'allow_null': True}
         }
+ 
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'mail']
+    
+    def create(self, validated_data):
+        user = User(
+            username = validated_data['username'],
+            mail = validated_data['mail']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user

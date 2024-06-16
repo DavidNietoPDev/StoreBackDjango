@@ -1,9 +1,17 @@
-from rest_framework import routers
-from .api import ProductViewSet, UserViewSet
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+from .api import ProductViewSet, UserViewSet, UserRegistrationViewSet
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'products', ProductViewSet)
+router.register(r'register', UserRegistrationViewSet, 'register')
 
-router.register('api/products', ProductViewSet, 'store')
-router.register('api/user', UserViewSet, 'user')
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include(router.urls)),
+]
